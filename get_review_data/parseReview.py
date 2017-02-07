@@ -25,12 +25,5 @@ def main() :
     fw.close()
     fr.close()
 
-    #CONFIG = readConfig(CONFIG_FILE)
-
-    #repos = CONFIG['reviewText']
-
-    #print "repos value : " + repos
-
-
 if __name__ == "__main__":
     main()
