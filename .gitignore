@@ -1,5 +1,0 @@
-make_review_posneg/runs/
-.idea/
-make_review_posneg/data_helpers.pyc
-make_review_posneg/text_cnn.pyc
-.gitignore
