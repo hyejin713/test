@@ -16,6 +16,7 @@ import csv
 # Data Parameters
 tf.flags.DEFINE_string("positive_data_file", "./data/rt-polaritydata/rt-polarity.pos", "Data source for the positive data.")
 tf.flags.DEFINE_string("negative_data_file", "./data/rt-polaritydata/rt-polarity.neg", "Data source for the positive data.")
+tf.flags.DEFINE_string("review_data_file", "./data/review_only_201702061721.txt", "Data source for the positive data.")
 
 # Eval Parameters
 tf.flags.DEFINE_integer("batch_size", 64, "Batch Size (default: 64)")
@@ -36,8 +37,8 @@ print("")
 
 # CHANGE THIS: Load data. Load your own data here
 if FLAGS.eval_train:
-    x_raw, y_test = data_helpers.load_data_and_labels(FLAGS.positive_data_file, FLAGS.negative_data_file)
-    y_test = np.argmax(y_test, axis=1)
+    x_raw = data_helpers.load_data_and_labels_one_param(FLAGS.review_data_file)
+    y_test = [1, 0]
 else:
     x_raw = ["a masterpiece four years in the making", "everything is off."]
     y_test = [1, 0]
@@ -82,10 +83,10 @@ with graph.as_default():
             all_predictions = np.concatenate([all_predictions, batch_predictions])
 
 # Print accuracy if y_test is defined
-if y_test is not None:
-    correct_predictions = float(sum(all_predictions == y_test))
-    print("Total number of test examples: {}".format(len(y_test)))
-    print("Accuracy: {:g}".format(correct_predictions/float(len(y_test))))
+# if y_test is not None:
+#     correct_predictions = float(sum(all_predictions == y_test))
+#     print("Total number of test examples: {}".format(len(y_test)))
+#     print("Accuracy: {:g}".format(correct_predictions/float(len(y_test))))
 
 # Save the evaluation to a csv
 predictions_human_readable = np.column_stack((np.array(x_raw), all_predictions))

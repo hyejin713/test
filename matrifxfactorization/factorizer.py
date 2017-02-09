@@ -1,12 +1,12 @@
 from __future__ import division
 from __future__ import print_function
 from time import gmtime, strftime
+from pandas import Series, DataFrame
 
 import time
 import sys
 import os
 from pylab import *
-from scipy import sparse
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -219,7 +219,22 @@ def get_item_bias(ratings_tr, ratings_val, lda, num_users, num_items, global_mea
 
 def main():
     path = os.path.expanduser(sys.argv[1])
-    ratings_df = feather.read_dataframe(path)
+    #ratings_df = feather.tw(path)
+    with open("./u.data") as input:
+    	line = zip(*(line.strip().split('\t') for line in input))
+
+    #userIds = [map(int, x) for x in line[0]]
+    #itemIds = [map(int, x) for x in line[1]]
+    #ratings = [map(int, x) for x in line[2]]
+    #print(userIds)
+    data = {'user_id':line[0], 'item_id':line[1], 'rating':line[2]}
+    ratings_df = DataFrame(data)
+    #data2 = [map(int, x) for x in ratings_df]
+    #ratings_df.convert_objects(convert_numeric=True)
+    ratings_df = ratings_df.astype(int).fillna(0)
+    print(ratings_df.dtypes)
+
+    print(ratings_df)
     num_ratings = ratings_df.shape[0]
     ratings = np.concatenate((np.array(ratings_df['user_id'], dtype=pd.Series).reshape(num_ratings, 1), np.array(ratings_df['item_id'], dtype=pd.Series).reshape(num_ratings, 1), np.array(ratings_df['rating'], dtype=pd.Series).reshape(num_ratings, 1)), axis=1)
     global_mean = mean(ratings[:,2])
