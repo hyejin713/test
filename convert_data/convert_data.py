@@ -29,7 +29,7 @@ def isNan(num):
 
 relatedMetadata = {}
 relatedMetadata = metaDataPath["related"]
-print(relatedMetadata)
+# print(relatedMetadata)
 changedData = {}
 changedData[len(userJsonData)] = {}
 i=0
@@ -77,84 +77,106 @@ del metaDataPath["related"]
 
 metaDataPath = pd.concat([changedDataFrame, metaDataPath], axis=1)
 result = pd.concat([userJsonData, metaDataPath], axis=1)
-print(result)
+# print(result)
 # convert price, also_bought_count, also_viewed_count, bought_togegher_count, salesRank, brand, categories, helpful, reviewText, overall, unixReviewTime
-with open('./output/make_data.csv', 'w', newline='') as csvfile:
+
+
+with open('./output/make_data.csv', 'w') as csvfile:
     userDataWriter = csv.writer(csvfile, delimiter=',')
-    userData = pd.DataFrame(columns=("price", "also_bought_count", "also_viewed_count", "bought_together_count",
-                                     "buy_after_viewing", "salesRank", "brand", "categories", "helpful", "reviewText",
-                                     "overall", "unixReviewTime"))
+
+
+    sampleSize = len(result['reviewerID'])
+    print("reviewer ID :" + str(sampleSize))
+    userDataWriter.writerow([str(sampleSize)] + ['3'])
+
+    userData = pd.DataFrame(columns=(
+                                    # "reviewerID",
+                                    "price",
+                                     # "also_bought_count", "also_viewed_count", "bought_together_count", "buy_after_viewing",
+                                    # "salesRank", "brand", "categories",
+                                    "helpful",
+                                     # "reviewText",
+                                     "overall",
+                                     # "unixReviewTime"
+                                     ))
+
+    #reviewerID
+    # reviewerID = []
+    # for data in result['reviewerID']:
+    #     reviewerID.append(data)
+    # userData["reviewerID"] = reviewerID
+
     #price
     priceData = []
     for data in result['price']:
         if isNan(data) == False:
-            priceData.append(int(data))
+            priceData.append(float(data))
         else:
             priceData.append(0)
     userData["price"] = priceData
 
     #also_bought_count
-    alsoBoughtCountData = []
-    for data in result['also_bought']:
-        if isNan(data) == False:
-            alsoBoughtCountData.append(int(data))
-        else:
-            alsoBoughtCountData.append(0)
-    userData["also_bought_count"] = alsoBoughtCountData
-
-    #also_viewed_count
-    alsoViewedCountData = []
-    for data in result['also_viewed']:
-        if isNan(data) == False:
-            alsoViewedCountData.append(float(data))
-        else:
-            alsoViewedCountData.append(0)
-    userData["also_viewed_count"] = alsoViewedCountData
-
-    #bought_together_count
-    boughtTogetherCountData = []
-    for data in result['bought_together']:
-        if isNan(data) == False:
-            boughtTogetherCountData.append(float(data))
-        else:
-            boughtTogetherCountData.append(0)
-    userData["bought_together_count"] = boughtTogetherCountData
-
-    #buy_after_viewing
-    buyAfterViewingCountData = []
-    for data in result['buy_after_viewing']:
-        if isNan(data) == False:
-            buyAfterViewingCountData.append(float(data))
-        else:
-            buyAfterViewingCountData.append(0)
-    userData["buy_after_viewing"] = buyAfterViewingCountData
+    # alsoBoughtCountData = []
+    # for data in result['also_bought']:
+    #     if isNan(data) == False:
+    #         alsoBoughtCountData.append(int(data))
+    #     else:
+    #         alsoBoughtCountData.append(0)
+    # userData["also_bought_count"] = alsoBoughtCountData
+    #
+    # #also_viewed_count
+    # alsoViewedCountData = []
+    # for data in result['also_viewed']:
+    #     if isNan(data) == False:
+    #         alsoViewedCountData.append(float(data))
+    #     else:
+    #         alsoViewedCountData.append(0)
+    # userData["also_viewed_count"] = alsoViewedCountData
+    #
+    # #bought_together_count
+    # boughtTogetherCountData = []
+    # for data in result['bought_together']:
+    #     if isNan(data) == False:
+    #         boughtTogetherCountData.append(float(data))
+    #     else:
+    #         boughtTogetherCountData.append(0)
+    # userData["bought_together_count"] = boughtTogetherCountData
+    #
+    # #buy_after_viewing
+    # buyAfterViewingCountData = []
+    # for data in result['buy_after_viewing']:
+    #     if isNan(data) == False:
+    #         buyAfterViewingCountData.append(float(data))
+    #     else:
+    #         buyAfterViewingCountData.append(0)
+    # userData["buy_after_viewing"] = buyAfterViewingCountData
 
     #salesRank
-    salesRank = []
-    for data in result['salesRank']:
-        if isNan(data) == False:
-            salesRank.append(data)
-        else:
-            salesRank.append("")
-    userData["salesRank"] = salesRank
-
-    #brand
-    brand = []
-    for data in result['brand']:
-        if isNan(data) == False:
-            brand.append(data)
-        else:
-            brand.append("")
-    userData["brand"] = brand
-
-    #category
-    category = []
-    for data in result['categories']:
-        if isNan(data) == False:
-            category.append(data)
-        else:
-            category.append("")
-    userData["categories"] = category
+    # salesRank = []
+    # for data in result['salesRank']:
+    #     if isNan(data) == False:
+    #         salesRank.append(data)
+    #     else:
+    #         salesRank.append("")
+    # userData["salesRank"] = salesRank
+    #
+    # #brand
+    # brand = []
+    # for data in result['brand']:
+    #     if isNan(data) == False:
+    #         brand.append(data)
+    #     else:
+    #         brand.append("")
+    # userData["brand"] = brand
+    #
+    # #category
+    # category = []
+    # for data in result['categories']:
+    #     if isNan(data) == False:
+    #         category.append(data)
+    #     else:
+    #         category.append("")
+    # userData["categories"] = category
 
     #helpful
     helpfulData = []
@@ -186,12 +208,12 @@ with open('./output/make_data.csv', 'w', newline='') as csvfile:
     userData["overall"] = overallData
 
     #unixReviewTime
-    unixReviewTimeData = []
-    for data in result['unixReviewTime']:
-        if isNan(data) == False:
-            unixReviewTimeData.append(int(data))
-        else:
-            unixReviewTimeData.append(0)
-    userData["unixReviewTime"] = unixReviewTimeData
+    # unixReviewTimeData = []
+    # for data in result['unixReviewTime']:
+    #     if isNan(data) == False:
+    #         unixReviewTimeData.append(int(data))
+    #     else:
+    #         unixReviewTimeData.append(0)
+    # userData["unixReviewTime"] = unixReviewTimeData
 
-    userData.to_csv(csvfile, sep=",")
+    userData.to_csv(csvfile, sep=",", index=False)
